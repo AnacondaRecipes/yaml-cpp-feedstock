@@ -21,6 +21,11 @@ source:
 build:
   number: {{ build_number }}
 
+requirements:
+  build:
+    - patch     # [unix]
+    - m2-patch  # [win]
+
 outputs:
   - name: yaml-cpp
     script: build_shared.sh  # [not win]
@@ -34,8 +39,6 @@ outputs:
         - {{ compiler('cxx') }}
         - cmake
         - ninja
-        - patch     # [unix]
-        - m2-patch  # [win]
     test:
       # NOTE: Author's tests are run from the build scripts in all architectures.
       files:
@@ -66,8 +69,6 @@ outputs:
         - {{ compiler('cxx') }}
         - cmake
         - ninja
-        - patch     # [unix]
-        - m2-patch  # [win]
       host:
         - {{ pin_subpackage('yaml-cpp', exact=True) }}
       run:
