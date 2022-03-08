@@ -10,7 +10,8 @@ cmake .. -G"Ninja" ${CMAKE_ARGS} \
       -DYAML_CPP_BUILD_TESTS=OFF \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_PREFIX_PATH=$PREFIX \
-      -DCMAKE_INSTALL_PREFIX=$PREFIX
+      -DCMAKE_INSTALL_PREFIX=$PREFIX \
+      -DYAML_CPP_INSTALL=ON
 
 # Build and install.
 ninja install || exit 1

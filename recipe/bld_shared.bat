@@ -11,7 +11,9 @@ cmake .. -G"Ninja" ^
     -DYAML_BUILD_SHARED_LIBS=ON ^
     -DCMAKE_BUILD_TYPE=Release ^
     -DCMAKE_PREFIX_PATH=%LIBRARY_PREFIX% ^
-    -DCMAKE_INSTALL_PREFIX=%LIBRARY_PREFIX%
+    -DCMAKE_INSTALL_PREFIX=%LIBRARY_PREFIX% ^
+    -DYAML_CPP_INSTALL=ON
+
 if errorlevel 1 exit 1
 
 :: Build and install.
