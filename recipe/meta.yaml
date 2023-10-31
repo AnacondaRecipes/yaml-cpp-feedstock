@@ -1,30 +1,15 @@
-{% set version = "0.7.0" %}
-{% set hash = "43e6a9fcb146ad871515f0d0873947e5d497a1c9c60c58cb102a97b47208b7c3" %}
-{% set build_number = "1" %}
+{% set version = "0.8.0" %}
 
 package:
   name: yaml-cpp-split
   version: {{ version }}
 
 source:
-  url: https://github.com/jbeder/yaml-cpp/archive/yaml-cpp-{{ version }}.tar.gz
-  sha256: {{ hash }}
-  patches:
-    # These patches fix a shared object issue in `0.7.0`. This is
-    # currently fixed in `master`, so future updates should not need
-    # them.
-    - include_yaml-cpp_dll.h.patch               # [win]
-    - include_yaml-cpp_node_detail_node.h.patch  # [win]
-    # Fix a defect in the cmake config file.
-    - yaml-cpp-config.cmake.in.patch
+  url: https://github.com/jbeder/yaml-cpp/archive/refs/tags/{{ version }}.tar.gz
+  sha256: fbe74bbdcee21d656715688706da3c8becfd946d92cd44705cc6098bb23b3a16
 
 build:
-  number: {{ build_number }}
-
-requirements:
-  build:
-    - patch     # [unix]
-    - m2-patch  # [win]
+  number: 0
 
 outputs:
   - name: yaml-cpp
@@ -83,6 +68,7 @@ about:
   license_family: MIT
   license_file: LICENSE
   summary: yaml-cpp is a YAML parser and emitter in C++ matching the YAML 1.2 spec.
+  description: yaml-cpp is a YAML parser and emitter in C++ matching the YAML 1.2 spec.
   dev_url: https://github.com/jbeder/yaml-cpp
   doc_url: https://github.com/jbeder/yaml-cpp.wiki.git
 
