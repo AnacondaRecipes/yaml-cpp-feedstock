@@ -7,9 +7,16 @@ package:
 source:
   url: https://github.com/jbeder/yaml-cpp/archive/refs/tags/{{ version }}.tar.gz
   sha256: fbe74bbdcee21d656715688706da3c8becfd946d92cd44705cc6098bb23b3a16
+  patches:                                    # [linux and (aarch64 or ppc64le or s390x)]
+    # TODO: Remove on the next update since this patch is already on master.
+    - patches/0001-fix-narrowing-error.patch  # [linux and (aarch64 or ppc64le or s390x)]
 
 build:
   number: 0
+
+requirements:
+  build:
+    - patch  # [linux and (aarch64 or ppc64le or s390x)]
 
 outputs:
   - name: yaml-cpp
