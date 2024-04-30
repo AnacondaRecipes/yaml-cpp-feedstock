@@ -12,7 +12,7 @@ source:
     - patches/0001-fix-narrowing-error.patch  # [linux and (aarch64 or ppc64le or s390x)]
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
