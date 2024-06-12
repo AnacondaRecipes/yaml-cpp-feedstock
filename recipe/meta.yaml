@@ -20,8 +20,8 @@ requirements:
 
 outputs:
   - name: yaml-cpp
-    script: build_shared.sh  # [not win]
-    script: bld_shared.bat   # [win]
+    script: build-lib.sh   # [unix]
+    script: build-lib.bat  # [win]
     build:
       run_exports:
         - {{ pin_subpackage('yaml-cpp', max_pin='x.x') }}
@@ -32,42 +32,57 @@ outputs:
         - cmake
         - ninja
     test:
-      # NOTE: Author's tests are run from the build scripts in all architectures.
       files:
-        - test
+        - test/
       requires:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - cmake
         - ninja
       commands:
-        # These tests ensure the library is in its expected location.
-        - test -f $PREFIX/lib/libyaml-cpp.so              # [not (osx or win)]
-        - test -f $PREFIX/lib/libyaml-cpp.dylib           # [osx]
-        - if not exist %LIBRARY_BIN%\\yaml-cpp.dll exit 1 # [win]
-        # These tests ensure a simple program can be built using the
-        # library. They are not altogether necessary, though they are
-        # nice to have.
-        - test/test.sh   # [not win]
-        - test/test.bat  # [win]
+        - test -f "${PREFIX}/lib/libyaml-cpp${SHLIB_EXT}"   # [unix]
+        - if not exist %LIBRARY_BIN%\yaml-cpp.dll (exit 1)  # [win]
+        - if not exist %LIBRARY_LIB%\yaml-cpp.lib (exit 1)  # [win]
+        - test ! -f "${PREFIX}/lib/libyaml-cpp.a"  # [unix]
+        - test -f "${PREFIX}/lib/cmake/yaml-cpp/yaml-cpp-config.cmake"              # [unix]
+        - if not exist %LIBRARY_LIB%\cmake\yaml-cpp\yaml-cpp-config.cmake (exit 1)  # [win]
+        # Running a test trying to link to the library
+        - cmake -G Ninja -S test/ -B build-test/ ${CMAKE_ARGS}  # [unix]
+        - cmake -G Ninja -S test/ -B build-test/ %CMAKE_ARGS%   # [win]
+        - cmake --build build-test/
+        - cmake --build build-test/ --target test
 
   - name: yaml-cpp-static
-    script: build_static.sh  # [not win]
-    build:
-      skip: true  # [win]
+    script: build-lib.sh   # [unix]
+    script: build-lib.bat  # [win]
     requirements:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - cmake
         - ninja
-      host:
-        - {{ pin_subpackage('yaml-cpp', exact=True) }}
-      run:
-        - {{ pin_subpackage('yaml-cpp', exact=True) }}
+      run_constrained:
+        - yaml-cpp < 0
     test:
+      files:
+        - test/
+      requires:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - cmake
+        - ninja
       commands:
-        - test -f $PREFIX/lib/libyaml-cpp.a  # [not win]
+        - test ! -f "${PREFIX}/lib/libyaml-cpp${SHLIB_EXT}"   # [unix]
+        - if exist %LIBRARY_BIN%\yaml-cpp.dll (exit 1)        # [win]
+        - if not exist %LIBRARY_LIB%\yaml-cpp.lib (exit 1)  # [win]
+        - test -f "${PREFIX}/lib/libyaml-cpp.a"             # [unix]
+        - test -f "${PREFIX}/lib/cmake/yaml-cpp/yaml-cpp-config.cmake"              # [unix]
+        - if not exist %LIBRARY_LIB%\cmake\yaml-cpp\yaml-cpp-config.cmake (exit 1)  # [win]
+        # Running a test trying to link to the library
+        - cmake -G Ninja -S test/ -B build-test/ ${CMAKE_ARGS}  # [unix]
+        - cmake -G Ninja -S test/ -B build-test/ %CMAKE_ARGS%   # [win]
+        - cmake --build build-test/
+        - cmake --build build-test/ --target test
 
 about:
   home: https://github.com/jbeder/yaml-cpp
