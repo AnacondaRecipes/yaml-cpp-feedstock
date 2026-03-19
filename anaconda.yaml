@@ -1,0 +1,7 @@
+anaconda_config_version: 1
+upstream_sources:
+  - github:
+      identifier: jbeder/yaml-cpp
+    packages:
+      - yaml-cpp
+      - yaml-cpp-static
