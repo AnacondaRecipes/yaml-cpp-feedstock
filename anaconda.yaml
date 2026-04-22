@@ -4,7 +4,7 @@ upstream_sources:
       identifier: jbeder/yaml-cpp
       use_max_tag: true
       include_regex: ^yaml-cpp-\d+\.\d+\.\d+$
-      strip_prefix: yaml-cpp-
+      prefix: yaml-cpp-
     packages:
       - yaml-cpp
       - yaml-cpp-static
