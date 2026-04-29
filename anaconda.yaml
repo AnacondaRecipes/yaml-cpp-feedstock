@@ -5,6 +5,3 @@ upstream_sources:
       use_max_tag: true
       include_regex: ^yaml-cpp-\d+\.\d+\.\d+$
       prefix: yaml-cpp-
-    packages:
-      - yaml-cpp
-      - yaml-cpp-static
